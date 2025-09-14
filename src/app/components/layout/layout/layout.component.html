@@ -1,0 +1,198 @@
+<div class="min-h-screen bg-gray-50 antialiased relative">
+  <!-- HEADER -->
+  <header
+    class="bg-white border-b border-gray-200 py-5 px-4 md:px-10 z-10 w-full md:fixed"
+  >
+    <div
+      class="flex flex-col md:flex-row md:items-center md:justify-between h-auto md:h-16"
+    >
+      <!-- Logo/Brand -->
+      <div class="flex items-center mb-3 md:mb-0">
+        <div
+          class="size-12 bg-blue-600 rounded-xl items-center justify-center aspect-square hidden md:flex"
+        >
+          <span class="text-white font-bold text-sm">MC</span>
+        </div>
+        <div class="md:ml-4">
+          <h1 class="text-xl font-bold text-gray-900">ToDo Application</h1>
+          <span class="text-gray-500 text-xs font-medium leading-none">
+            Challenge of C# backend development, and Angular frontend
+            integration
+          </span>
+        </div>
+      </div>
+
+      <!-- User info -->
+      <div
+        class="flex flex-col md:flex-row md:items-center text-xs text-gray-500 font-medium gap-2 md:gap-5"
+      >
+        @if (currentUser) {
+        <h1 class="cursor-pointer">
+          Welcome back,
+          <span class="text-blue-500" (click)="onUserProfileClick()">{{
+            currentUser?.fullName
+          }}</span>
+        </h1>
+        <button
+          (click)="logout()"
+          class="text-xs text-gray-700 hover:text-gray-700 bg-gray-300 hover:bg-gray-400 px-5 py-3 rounded-md transition"
+        >
+          Logout
+        </button>
+        } @else {
+        <div class="flex flex-col md:flex-row gap-2 md:gap-5">
+          <a
+            href="/login"
+            class="text-white font-medium bg-blue-500 rounded-md px-5 py-3 hover:bg-blue-600 transition"
+            >Login</a
+          >
+          <a
+            href="/register"
+            class="text-white font-medium bg-blue-400 rounded-md px-5 py-3 hover:bg-blue-600 transition"
+            >Register</a
+          >
+        </div>
+        }
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="min-h-screen">
+    <div class="flex">
+      <!-- SIDEBAR -->
+      <div
+        class="hidden lg:flex lg:flex-col lg:w-64 lg:inset-y-0 fixed h-screen z-0"
+      >
+        <div
+          class="flex-1 bg-white border-r border-gray-200 py-5 overflow-y-auto pt-30"
+        >
+          <!-- ✅ Nav component com output binding -->
+          <app-nav (viewChanged)="onViewChanged($event)"></app-nav>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT AREA -->
+      <div class="flex-1 ml-0 lg:ml-64 md:mt-26">
+        <div class="p-5 md:p-10">
+          <!-- Mobile Navigation -->
+          <nav class="lg:hidden mb-5">
+            <div
+              class="bg-white border border-gray-200 rounded-lg p-1 flex space-x-1 overflow-x-auto"
+            >
+              <button
+                *ngFor="let view of mobileViews"
+                (click)="switchView(view.id)"
+                [ngClass]="{
+                  'bg-blue-100 text-blue-700': currentView === view.id,
+                  'text-gray-500': currentView !== view.id
+                }"
+                class="px-3 py-2 text-sm font-medium rounded-md whitespace-nowrap"
+              >
+                {{ view.label }}
+              </button>
+            </div>
+          </nav>
+          <!-- Content Container -->
+          <main class="bg-white border border-gray-200 rounded-lg">
+            <!-- Todo List View -->
+            @if (currentView === 'list') {
+            <section class="">
+              <app-todo-list [reloadList]="reloadList"></app-todo-list>
+            </section>
+            }
+
+            <!-- Todo Form View -->
+            @if (currentView === 'form') {
+            <section>
+              <div class="px-5 lg:px-10 py-5 border-b border-gray-200">
+                <div>
+                  <h2 class="text-xl font-bold text-gray-900">
+                    Add a new task
+                  </h2>
+                  <p class="text-sm text-gray-500 mt-1 font-medium">
+                    Based on your preferences
+                  </p>
+                </div>
+              </div>
+              <div class="py-5 px-5 lg:px-10">
+                <app-todo-form (created)="onTodoCreated()"></app-todo-form>
+              </div>
+            </section>
+            } @if (currentView === 'item') {
+            <section>
+              <div class="px-5 lg:px-10 py-5 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900">
+                  Todo Item Component
+                </h2>
+                <p class="text-sm text-gray-500 mt-1 font-medium">
+                  Individual todo item display
+                </p>
+              </div>
+              <div class="px-5 lg:px-10 py-5">
+                <app-todo-item
+                  [todo]="testTodo"
+                  (deleted)="onTodoDeleted($event)"
+                  (updated)="onTodoUpdated($event)"
+                >
+                </app-todo-item>
+              </div>
+            </section>
+            }
+
+            <!-- Loading View -->
+            @if (currentView === 'loading') {
+            <section>
+              <div class="px-10 py-5 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900">Loading States</h2>
+                <p class="text-sm text-gray-500 mt-1 font-medium">
+                  Loading indicators and states
+                </p>
+              </div>
+              <div class="px-10 py-5 space-y-8">
+                <div>
+                  <h3 class="text-sm font-medium text-gray-900 mb-3">
+                    Default Loading
+                  </h3>
+                  <app-loading message="Loading tasks..."></app-loading>
+                </div>
+              </div>
+            </section>
+            }
+
+            <!-- Error View -->
+            @if (currentView === 'error') {
+            <section>
+              <div class="px-10 py-5 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900">Error States</h2>
+                <p class="text-sm text-gray-500 mt-1 font-medium">
+                  Error handling and retry options
+                </p>
+              </div>
+              <div class="px-10 py-5 space-y-8">
+                <div>
+                  <h3 class="text-sm font-medium text-gray-900 mb-3">
+                    Error with Retry
+                  </h3>
+                  <app-error
+                    message="Failed to load tasks. Please check your connection."
+                    [showRetry]="true"
+                    (retry)="onRetry()"
+                  >
+                  </app-error>
+                </div>
+              </div>
+            </section>
+            } @if (currentView === 'profile') {
+            <section>
+              <div class="p-5 md:p-10">
+                <app-user-profile></app-user-profile>
+              </div>
+            </section>
+            }
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div
+  class="flex flex-col items-center justify-center bg-white border border-red-200 rounded-2xl p-6 text-center"
+>
+  <!-- Icon -->
+  <div
+    class="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 text-red-600 mb-4"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      class="size-4"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  </div>
+
+  <!-- Message -->
+  <p class="text-sm font-medium text-gray-700">{{ message }}</p>
+
+  <!-- Retry button -->
+  <button
+    *ngIf="showRetry"
+    (click)="onRetry()"
+    class="mt-4 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition"
+  >
+    Try Again
+  </button>
+</div>

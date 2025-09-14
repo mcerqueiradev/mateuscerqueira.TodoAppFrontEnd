@@ -1,0 +1,64 @@
+<div>
+  <!-- Header -->
+  <div
+    class="bg-white rounded-lg border border-gray-200 p-6 sm:p-8 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0"
+  >
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">User Profile</h1>
+      <p class="text-sm text-gray-500 mt-1">Manage your account settings</p>
+    </div>
+    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+      <button
+        (click)="editProfile()"
+        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm font-medium"
+      >
+        Edit Profile
+      </button>
+    </div>
+  </div>
+
+  <!-- Profile Card -->
+  <div
+    class="bg-white rounded-lg border border-gray-200 p-6 sm:p-8 mb-6 flex flex-col sm:flex-row sm:items-center gap-6"
+  >
+    <!-- Avatar -->
+    <div
+      class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0"
+    >
+      <span class="text-white text-2xl font-bold uppercase">
+        {{ currentUser?.fullName?.charAt(0) || "U" }}
+      </span>
+    </div>
+
+    <!-- User Info -->
+    <div class="flex-1">
+      <h2 class="text-xl font-semibold text-gray-900">
+        {{ currentUser?.fullName }}
+      </h2>
+      <p class="text-gray-600 font-medium text-xs">
+        {{ currentUser?.email }}
+      </p>
+      <div
+        class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-2"
+      >
+        <span
+          class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+        >
+          {{ getRoleLabel(currentUser?.role) }}
+        </span>
+        <span class="text-xs text-gray-500 font-medium">
+          Member since {{ currentUser?.createdAt | date : "MMM yyyy" }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+@if (showEditModal) {
+<app-edit-user-modal
+  [user]="currentUser"
+  (saved)="onUserSaved($event)"
+  (closed)="onModalClosed()"
+></app-edit-user-modal>
+}
