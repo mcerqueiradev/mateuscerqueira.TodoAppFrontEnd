@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:7073/api',
+  apiUrl: 'https://todoapp-backend-hfpq.onrender.com/api',
 };
